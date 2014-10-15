@@ -109,8 +109,25 @@ function outer(){
 > alert(arguments instanceof Array);  //false
 alert(arguments instanceof Object);  //true
 > ```
-3. tostring
-4. constructor
+
+**3. Object.prototype.toString**
+
+判断某个对象属于某中内置类型，最靠谱的方法就是Object.prototype.toString。
+
+```
+console.log(Object.prototype.toString.call([]));
+console.log(Object.prototype.toString.call({}));
+console.log(Object.prototype.toString.call(null));
+console.log(Object.prototype.toString.call(1));
+console.log(Object.prototype.toString.call("lee"));
+console.log(Object.prototype.toString.call(undefined));
+```
+
+> * 输入结果 ：[object Array]、[object Object]、[object Null]、[object Number]、[object String]、[object Undefined]
+> * 可能值："Array", "Boolean", "Date", "Error", "Function", "Math", "Number", "Object", "RegExp", "String".
+
+**4. constructor**
+
 > ```
 > var obj = "jeff wong"; 
 > alert(obj.constructor == String); //true 

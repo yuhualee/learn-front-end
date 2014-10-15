@@ -15,10 +15,10 @@ var args = Array.prototype.slice.call(arguments);
 ```
 ## 类数组
 ### 1. 判断arguments是不是数组
-
+```
 alert(arguments instanceof Array);
 alert(arguments instanceof Object);
-
+```
 ### 2. 如何严格的判断一个数据是数组（Array）类的实例
 
 ```
@@ -140,3 +140,38 @@ foo(1,2,3,4);
 ```
 
 
+## this
+
+## 闭包
+
+### 预解释
+
+
+
+
+##  call,apply
+
+## setTimeout和setInterval
+
+
+## 移动端
+
+## 日期
+## 数组
+## 字符串
+## 正则
+## 面向对象
+## 设计模式
+## node.js
+## css3
+## ajax
+## jQuery
+## html5
+## css3动画
+## js兼容性
+## css兼容性
+## json
+
+时间复杂度，空间复杂度，低耦合高内聚
+
+##### eval 
