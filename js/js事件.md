@@ -1,5 +1,65 @@
 ### **javascript事件**
 
+* **事件及其兼容性：**
+
+	1. 事件：   
+	
+		```e = e||window.event```
+	
+	2. 事件源   
+	
+		```
+		e.target||e.srcElement
+		```
+	3. 事件类型：e.type
+	
+	4. 阻止浏览器默认行为 
+	  
+		```
+		if(e.preventDefault{
+			e.preventDefault();  //标准
+		}else{
+			e.returnValue = false;  //ie 
+		}
+		```
+	5. 阻止事件传播：
+	
+		```
+		if(e.stopPropagation){
+			e.stopPropagation();
+		}else{
+			e.cancelBubble = true;  
+		}
+		```
+	6. 事件绑定：
+	
+		```
+		function addEventHandle(target,type,func){
+			if(target.addEventListener){  //IE9及以上，标准浏览器
+				target.addEventListener(type,func,false);
+			}else if(target.attachEvent){   ////ie8及以下
+				target.attachEvent("on"+type,func);
+			}else{
+				target["on"+type] = func;
+			}
+		}
+		```
+		
+	7. 解除绑定：
+	
+		```
+		function removeEventHandle(target,type,func){
+			if(target.removeEventListener){
+				target.removeEventListener(type,func,false);
+			}else if(target.detachEvent){
+				target.detachEvent("on"+type,func);
+			}else{
+				delete target["on"+type];
+			}
+		}
+		```
+
+
 * **事件绑定：**
 
 	* 直接在DOM结构里面绑定:   
@@ -16,17 +76,21 @@
 		```
 		addEventListener(div,'click',fn);
 		```
+* **事件源：**
 
+	```
+	var target = e.target || e.srcElement;
+	```
 
 * **事件流：**  
 
 	DOM(文档对象模型)结构是一个树型结构，当一个HTML元素产生一个事件时，该事件会在元素结点与根节点之间按特定的顺序传播，路径所经过的节点都会收到该事件，这个传播过程可称为DOM事件流。事件顺序有两种类型：事件捕捉和事件冒泡。
 
-* **事件冒泡：**从dom结构的最里层向外扩散，最终到达document。像水泡从水里浮起一样。
+	* **事件冒泡：**从dom结构的最里层向外扩散，最终到达document。像水泡从水里浮起一样。
 
-	* 例3.1：
+		* 例3.1：
 
-		```
+			```
 	//html
 	<div id="l1">这是l1
 		<div id="l2">这是l2
@@ -62,7 +126,9 @@
 	```
 	> 点击最里层时，四个div上的事件都会被触发，最终到达document上面。
 	
-	* **阻止事件冒泡：**
+	* **事件捕获：** 和冒泡相反，像石子落入水中一样。（*IE，opera浏览器中，是不存在这个阶段的*）
+	
+	* **阻止事件传播：** 我们通常说的是阻止冒泡，其实是阻止事件传播，包括冒泡和捕获。
 	
 		```
 		e = e || window.event;
@@ -87,9 +153,8 @@
 		}
 		```
 
-* **事件捕获：**像石子落入水中一样。（*IE，opera浏览器中，是不存在这个阶段的*）
 
-* **javascript事件代理：**
+
 
 * **javascript事件委托：**
 
@@ -128,6 +193,11 @@
 * **事件监听：**
 
 	* addEventListener(type,fn,boolean)，前面两个参数不用解释，第三个参数boolean，就是决定注册事件发生在捕 获阶段还是冒泡阶段，
+		
+		```
+		obj.addEventListener("click", func, true); // 捕获方式
+		obj.addEventListener("click", func, false); // 冒泡方式
+		```
 	
 	* false : 冒泡阶段
 	
@@ -151,6 +221,8 @@
 		```
 		> 点击之后，从l4到l1向外执行----冒泡阶段
 		
+	* true : 捕获阶段
+		
 		例7.2 （*修改7.1*）
 		
 		```
@@ -162,7 +234,7 @@
 		> 点击之后，从l1向l4执行---捕获阶段。*IE，opera中无变化，因为不存在捕获阶段）*
 	
 
-	* true : 捕获阶段
+	
 
 
 

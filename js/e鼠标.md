@@ -212,24 +212,8 @@ document.addEventListener("DOMContentLoaded");
 11. 11
 
 
-e.returnVale = false;  //IE阻止默认行为
 
-e.stopPropagation();  //标准阻止冒泡
 
-e.cancelBubble = true;   //IE取消冒泡
-
-```
-if(e.preventDefault()){
-	e.preventDefault();
-}else{
-	e.returnValue = false;
-}
-if(e.stopPropagation){
-	e.stopPropagation();
-}else{
-	e.cancleBubble = true;
-}
-```
 ### 1. 事件对象本身：
 > * 火狐浏览器是虚参数，就是给方法定一个形参，但运行（事件触发运行）时不会人为的传实参，那么浏览器会自动把事件对象赋给这个参数。
 > * IE是全局对象window.event。
