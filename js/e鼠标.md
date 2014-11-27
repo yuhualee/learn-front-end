@@ -18,6 +18,7 @@ var a = ["a","b","c","d"];
 ## 事件
 
 ### 1
+
 用 event.pageX 和 event.pageY 来表示鼠标相对于文档的位置，如果你有一个 500*500 的窗口并且你的鼠标在绝对中间，那么 pageX 和 pageY  的值都是 250，如果你向下滚动  500， 那么 pageY 将变成 750。
 MSIE 正好相反，它使用 event.clientX 和 event.clientY 表示鼠标相当于窗口的位置，而不是文档。在同样的例子中，如果你向下滚动500，clientY 依然是 250，因此，我们需要添加 scrollLeft 和 scrollTop 这两个相对于文档的属性。最后，MSIE 中文档并不是从 0，0 开始，而是通常有一个小的边框（通常是 2 象素），边框的大小定义在  document.body.clientLeft 和 clientTop 中，我们也把这些加进去。
 
