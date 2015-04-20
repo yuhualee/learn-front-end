@@ -85,6 +85,8 @@
 		require(["b"]);  //b模块加载jquery-1.7.2
 		```
 		
+		> 这时require(['A'])将会下载jquery-1.6.4.js，require(['B'])会下载jquery-1.7.2.js。模块“A”如果写成“*”则表示除了B模块使用jquery-1.7.2之外其它模块都使用jquery-1.6.4。map参数解决了模块的各个版本问题，很好的向下兼容了老代码。
+		
 	* **config:** 用来给指定的模块传递一些有用的数据。
 	
 		```
@@ -117,7 +119,7 @@
 		})
 		```
 	
-
+	* require函数的第一个参数是数组，数组中存放的是模块名（字符串类型），数组中模块与回调函数的参数一一对应。
 	
 * **使用requirejs:** 
 
@@ -140,7 +142,19 @@
 		});
 		```
 
-
+		> define的参数为一个匿名函数，该匿名函数执行后返回一个参数。
+		
+		* AMD规范
+		
+			```
+			define(id?, dependencies?, factory);
+			```
+			
+			* id: 模块标识，可以省略
+			* dependencies: 所依赖的模块，可以省略
+			* factory: 模块的实惠，或者一个javascript对象
+			
+			> dependencies元素的顺序和factory参数一一对应
 
 	* **main.js**
 
@@ -163,7 +177,7 @@
 			node r.js -o baseUrl=js name=main out=built.js
 			```
 			> 1. **-o:** 表示优化，该参数是固定的，必选。
-			> 2. **baseUrl:**  指存放模块的根目录，这里是js，如果没有设置将从当前目录中查找main.js。
+			> 2. **baseUrl:**  指存放模块的根目录，相对于引入requirejs的页面为参考点，如果没有设置将从当前目录中查找main.js。
 			> 3. **name:** 模块的入口文件，这里设置成“main”，那么r.js会从baseUrl+main去查找。这里实际是js/main.js。r.js会分析main.js，找出其所依赖的所有其它模块，然后合并压缩。
 			> 4. **out:** 指合并压缩后输出的文件路径，这里直接是built.js，那么将输出到根目录r4下。
 			> 5. **excludeShallow=selector:**  合并时将排除该文件，单独加载。
