@@ -2,18 +2,42 @@
 
 1. 类型
 
-	* 原始类型：
-	
-		* number
-		* string
-		* boolean
+	* **基本数据类型：**基本数据类型里面存储的是具体的值，是可以直接访问的，可以直接进行操作。
+
+		* number 数字类型
+		* string 字符串
+		* undefined  未定义
+		* boolean  布尔值
 		* null
-		* undefined
+
+		```
+		var a = b = c = 10;
+		a = 11;
+		alert(a);   //11
+		alert(b);   //10
+		```
+
+	* **引用数据类型：**存储的是一个地址，是对空间的引用。访问的时候可以按照引用地址来访问，不可以直接操作对象的数据。
 		
-	* 引用类型
-	
-		* Function
-		* Object
+		```
+		var a = [1,2,3];
+		function aaa(a){
+   			 a = [1,2,3,4,]
+		}
+		aaa(a);
+		alert(a);   //[1,2,3]
+		```
+
+		* object  对象
+		* function
+
+		```
+		var a = b = {name:lyh,ege:18};
+		a.name = "lee";
+		alert(a.name);
+		alert(b.name);
+		```
+
 		
 	---	
 

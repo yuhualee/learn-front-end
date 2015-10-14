@@ -1,3 +1,59 @@
+### javascript数组操作
+
+#### 一、数组的操作
+
+* **数组的创建：**
+
+	```
+	var arr = [];
+	var arr = new Array();
+	var arr = new Array([size]);   //创建并指定长度
+	var arr = new Array([ele1,ele2,ele3...]);  //创建并赋值
+	```
+	
+* **数组的访问：**
+
+	```
+	var getArr = arr[1];    //获取
+	arr[1] = 'new value';   //赋值
+	```
+
+* **数组的添加：**
+
+	* arr.push([item1,item2,item3...]);   //添加到最后
+	* arr.unshift([item1,item2,item3...])   //添加到开头
+	* arr.splice(insertPos,0,[item1,item2,item3...]);   //添加到指定位置
+	
+* **数组元素的删除：**
+
+	* arr.pop();  //删除最后一个
+	* arr.shift();   //删除第一个
+	* arr.splice(deletePos，deleteCount);    //删除指定位置的，指定个数；
+	* arr.slice(start,[end]);    
+	
+* **数组的合并：**
+
+	* arr.concat([item1,item2,item3...]);
+
+* **数组的拷贝：**
+
+	* array.slice(0); //返回数组的拷贝数组，注意是一个新的数组，不是指向
+	* array.concat(); //返回数组的拷贝数组，注意是一个新的数组，不是指向
+	
+* **数组的排序：**
+
+	* array.reverse(); //反转元素（最前的排到最后、最后的排到最前），返回数组地址
+	* array.sort(); //对数组元素排序，返回数组地址
+
+* **数组的字符串化：**
+
+	* array.join(separator); //返回字符串，这个字符串将数组的每一个元素值连接在一起，中间用 separator 隔开。
+	* toLocaleString 、toString 、valueOf：可以看作是join的特殊用法，不常用
+
+
+
+#### 二、数组的方法
+
 * **splice():** 方法向/从数组中添加/删除/替换项目，然后**返回被删除**的项目，**原数组改变**。
 	
 	```
@@ -5,7 +61,7 @@
 	```
 	
 	> splice() 方法可删除从 index 处开始的howmany(零个或多个)元素，并且用参数列表中声明的一个或多个值来替换那些被删除的元素。
-	
+
 	```
 	var a = [2,"a","b","c",64,33];
 	b = a.splice(2,1,["d","e"]);
@@ -129,3 +185,24 @@ Array.join(separator)
 	```
 	
 * **toString():** 把数组换成字符串，并返回结果。数组之间用逗号隔开。
+
+#### 三、数组属性
+
+* **length属性：**
+
+* **prototype属性：**  返回对象类型原型的引用，prototype属性是object共有的。
+
+	* 例：返回数组中的最大值：
+	
+		```
+		Array.prototype.max = function(){
+		  return this.sort(function(a,b){
+		    return b - a;
+		  })[0];
+		};
+		[1,2,3,4,10,5].max();
+		```
+		
+* **construtor属性：** 表示创建对象的函数
+
+	object.constructor // object 是对象或函数的名称。
