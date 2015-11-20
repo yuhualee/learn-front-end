@@ -1,96 +1,19 @@
-### **javascript事件**
+# **javascript事件**
 
-* **事件及其兼容性：**
+#### 事件流
 
-	1. 事件：   
-	
-		```e = e||window.event```
-	
-	2. 事件源   
-	
-		```
-		e.target||e.srcElement
-		```
-	3. 事件类型：e.type
-	
-	4. 阻止浏览器默认行为 
-	  
-		```
-		if(e.preventDefault{
-			e.preventDefault();  //标准
-		}else{
-			e.returnValue = false;  //ie 
-		}
-		```
-	5. 阻止事件传播：
-	
-		```
-		if(e.stopPropagation){
-			e.stopPropagation();
-		}else{
-			e.cancelBubble = true;  
-		}
-		```
-	6. 事件绑定：
-	
-		```
-		function addEventHandle(target,type,func){
-			if(target.addEventListener){  //IE9及以上，标准浏览器
-				target.addEventListener(type,func,false);
-			}else if(target.attachEvent){   ////ie8及以下
-				target.attachEvent("on"+type,func);
-			}else{
-				target["on"+type] = func;
-			}
-		}
-		```
-		
-	7. 解除绑定：
-	
-		```
-		function removeEventHandle(target,type,func){
-			if(target.removeEventListener){
-				target.removeEventListener(type,func,false);
-			}else if(target.detachEvent){
-				target.detachEvent("on"+type,func);
-			}else{
-				delete target["on"+type];
-			}
-		}
-		```
+DOM(文档对象模型)结构是一个树型结构，当一个HTML元素产生一个事件时，该事件会在元素结点与根节点之间按特定的顺序传播，路径所经过的节点都会收到该事件，这个传播过程可称为DOM事件流。事件顺序有两种类型：事件捕捉和事件冒泡。
+
+1. 事件流
+
+	描述的是在页面中接受事件的顺序
 
 
-* **事件绑定：**
+* 事件冒泡
 
-	* 直接在DOM结构里面绑定:   
-		```
-		<div onclick="fn()"></div>
-		```
-		
-	* 在javascript里面绑定：    
-		```
-		div.onclick = function(){};
-		```
-		
-	* 事件监听：   
-		```
-		addEventListener(div,'click',fn);
-		```
-* **事件源：**
-
+	由最具体的元素接收，然后逐级向上传播至最不具体的元素的节点（文档）
+	
 	```
-	var target = e.target || e.srcElement;
-	```
-
-* **事件流：**  
-
-	DOM(文档对象模型)结构是一个树型结构，当一个HTML元素产生一个事件时，该事件会在元素结点与根节点之间按特定的顺序传播，路径所经过的节点都会收到该事件，这个传播过程可称为DOM事件流。事件顺序有两种类型：事件捕捉和事件冒泡。
-
-	* **事件冒泡：**从dom结构的最里层向外扩散，最终到达document。像水泡从水里浮起一样。
-
-		* 例3.1：
-
-			```
 	//html
 	<div id="l1">这是l1
 		<div id="l2">这是l2
@@ -124,39 +47,182 @@
 		}
 	})();
 	```
-	> 点击最里层时，四个div上的事件都会被触发，最终到达document上面。
+	> 点击最里层时，四个div上的事件都会被触发，最终到达document上面。所以我们很多时候会利用事件冒泡，把事件绑定到document上，通过判断e.target，来触发事件，就是事件委托。
+
+
+* 事件捕获
+
+	最不具体的节点先接收事件，而最具体的节点应该是最后接收事件
 	
-	* **事件捕获：** 和冒泡相反，像石子落入水中一样。（*IE，opera浏览器中，是不存在这个阶段的*）
+#### 事件处理
+
+1. html事件处理
+
+	直接添加到html结构中
 	
-	* **阻止事件传播：** 我们通常说的是阻止冒泡，其实是阻止事件传播，包括冒泡和捕获。
+	```
+	<button onclick = 'demo()'> 点击</button>
+	```
+	> 1. 结构和表现不分离
+	
+	> * 修改麻烦
+	
+
+* dom0级事件处理
+
+	把一个函数赋值给一个事件处理程序属性
+	
+	```
+	obj.onclick = function(){
+		//code
+	}	
+	obj.onclick ＝ null;
+	```
+	
+	> 缺点，多个事件会被覆盖掉
 	
 		```
-		e = e || window.event;
-		if(e.stopPropagation){
-			e.stopPropagation();  //标准游览器阻止事件冒泡。
-		}else{
-			e.cancelBubble = true;   //IE浏览器。
+		obj.onclick = function(){
+			//code  111
+		}
+		obj.onclick = function(){
+			//code  222
 		}
 		```
+
+	
+* dom2级事件处理
+
+	* addEventListener('事件名'，‘事件处理函数’，‘布尔值’);
+	
+		* true - 事件捕获
 		
-		* 例3.2  （*修改例3.1*）
+		* false - 事件冒泡
 		
 		```
-		l4.onclick = function(e){
-			e = e || window.event;
-			if(e.stopPropagation){
-				e.stopPropagation();  //标准游览器阻止事件冒泡。
+		function demo1(){
+			// ...code...
+		}
+		function demo2(){
+			//...code...
+		}
+		function demo3(){
+			//...code...
+		}
+		obj.addEventListener('click',demo1,false);
+		obj.addEventListener('click',demo2,false);
+		obj.addEventListener('click',demo3,false);
+		```
+		> 事件不会覆盖
+	
+	* removeEventListener();
+	
+		```
+		obj.removeEventListener('click',demo2);
+		```
+
+* ie事件处理程序
+
+	* attachEvent
+	
+		```
+		if(btn.addEventListener){
+			btn.addEventListener('click',fn,false);
+		}else if(btn.attachEvent){
+			btn.attachEvent('onclick',fn);
+		}else{  //ie8之前的浏览器，只能处理dom0级事件处理
+			bnt.onclick = fn();
+		}
+		```
+	
+	* detachEvent - 
+	
+#### 事件对象
+
+* 事件对象
+
+	在触发DOM事件的时候都会产生一个对象
+	
+* 事件对象event
+
+	1. e: 
+	
+		```
+		function demo(e){
+			var e = e || window.event;   //标准事件
+			var target = e.target || e.srcElement;  //目标元素
+			var type = e.type;   //事件类型
+			//阻止默认行为
+			if(e.preventDefault){
+				e.preventDefault();    //标准浏览器，
 			}else{
-				e.cancelBubble = true;   //IE浏览器。
+				e.returnValue = false;   //ie
 			}
-			alert("l4");
+			//阻止事件传播
+			if(e.stopPropagation){
+				e.stopPropagation();
+			}else{
+				e.cancelBubble = true;
+			}
+		}	
+		//-----
+		```
+
+
+	* type: 获取事件类型 
+	
+		```
+		document.getElementById('btn').addEventListener('click',showType);
+		function showType (e) {
+		  alert(e.type);
+		}
+		```
+	
+	* target: 获取事件目标
+	
+		```
+		function show(e){
+		    alert(e.target);
+		}
+  		document.body.addEventListener('click',show);
+  		//[object HTMLButtonElement]
+		```
+	
+	* stopPropagation(): 阻止事件冒泡
+	
+	* preventDefault(): 阻止事件默认行为
+	
+	* 事件绑定
+	
+		```
+		//事件绑定----	
+		function addEventHandle(target,type,fn){
+			if(target.addEvnetListener){ //IE9及以上，标准浏览器
+				target.addEventListener(type,fn,flase);
+			}else if(target.attachEvent){  //ie8及以下
+				target.attachEvent('on'+type,fn);
+			}else{
+				target['on'+type] = fn();
+			}
+		}
+		```
+		
+	* 解除绑定
+	
+		```
+		function removeEventHandle(target,type,fn){
+			if(target.removeEventListener){
+				target.removeEventListener(type,fn);
+			}else if(target.detachEvent){
+				target.detachEvent('on'+type,fn);
+			}else{
+				delete target['on'+type];
+			}
 		}
 		```
 
 
-
-
-* **javascript事件委托：**
+* **事件委托：**
 
 	事件委托就是用事件传播的机制，无论哪一个网页元素，它的click事件都会最终传到document上。这样，则只需在document上处理click事件既可。
 
@@ -164,7 +230,7 @@
 	事件委托是冒泡的一个应用，可以减少绑定次数，同时也不用担心内部元素的改变，也不需要在内部元素改变后，重新进行绑定。
 
 
-	* 例：6.1 （*个性3.2的例子*）
+	* 例：6.1 
 	
 		```
 		;(function(){	
@@ -177,16 +243,19 @@
 		})();
 		```
 		
-	* 例6.2 （*修改6。1中的例子*）
-	
+	* 例6.2 
+		
 		```
 		//注意：如果在例6.1中加入下面的代码，将阻止冒泡
 		l3.onclick = function(e){
 			e.stopPropagation();
 		}
 		```
+		
 		* 点击l4,l3都将阻止冒泡，因为在l3阶段阻止了，其内部的冒泡也会被阻止掉。
+		
 		* 如果委托内部有其它点击事件也需要单独处理，如果不处理，也会把点击事件委托到外层。
+		
 		* 内部的a链接也会被委托的事件代替，需要单独处理，阻止链接事件的冒泡```e.stopPropagation();```。如果a链接要绑定委托事件，则```return false;```。
 		
 		

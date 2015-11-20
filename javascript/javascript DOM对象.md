@@ -10,6 +10,8 @@ http://www.cnblogs.com/kissdodog/archive/2012/12/25/2833213.html
   
 ## document对象
 
+#### 遍历
+
 * **获取元素**
 
 	* document.getElementById(); 获取ID
@@ -86,7 +88,53 @@ http://www.cnblogs.com/kissdodog/archive/2012/12/25/2833213.html
 	* ele.clientHeight;  返回元素的可见高度，它的高度=heigh+padding，不包含border。
  
 
-## attribute
+#### attribute
+
+
+#### DOM操作css
+
+通过DOM元素操作css样式
+
+```
+document.getElementById('div').style.color = 'red';
+```
+
+## DOM EventListener
+
+* DOM EventListener
+
+	* addEventListener():  方法用于向指定元素添加事件句柄
+	
+		addEventListener(type,fn,boolean)，前面两个参数不用解释，第三个参数boolean，就是决定注册事件发生在捕 获阶段还是冒泡阶段，
+		
+		```
+		function $(id){
+    		return document.getElementById(id);
+		}
+  		$('btn').addEventListener('click',hello);
+  		$('btn1').addEventListener('click',hello);
+  		function hello(){
+    		alert(1);
+  		}
+		```
+	
+	* removeEventListener(): 移除方法添加的事件句柄
+	
+		```
+		$('btn').removeEventListener('event',fn);
+		```
+
+
+
+	
+## ff
+
+* fff
+
+	* offsetHeight - 网页尺寸
+	
+	* scrollHeight - 网页尺寸
+
 
 
 
