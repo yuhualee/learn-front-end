@@ -19,23 +19,23 @@ Excerpt:
 * **1.2 工厂模式:就是对生产对象的流程进行封装**
 
 	```
-function person(name,age){
-	var obj = {};
-	obj.name = name;
-	obj.age = age;
-	obj.getName = function(){
-		alert(this.name);
+	function person(name,age){
+		var obj = {};
+		obj.name = name;
+		obj.age = age;
+		obj.getName = function(){
+			alert(this.name);
+		}
+		return obj;
 	}
-	return obj;
-}
-//批量生产对象
-var a = [];
-for(var i=0;i<10;i++){
-	a.push(person("lyh"+i,18+i));
-}
-//单独设置
-var lyh = new person("李玉华",18);
-```
+	//批量生产对象
+	var a = [];
+	for(var i=0;i<10;i++){
+		a.push(person("lyh"+i,18+i));
+	}
+	//单独设置
+	var lyh = new person("李玉华",18);
+	```
 
 	> 1. 解决了我们批量生产的问题
 	> 2. 随着发展我们还要区分产品的差异化----构造函数模式
@@ -43,19 +43,19 @@ var lyh = new person("李玉华",18);
 * **1.3 构造函数**
 		
 	```
-function Person(name,age){
-	this.name = name;
-	this.age = age;
-	this.getName = function(){
-		alert(this.name);
+	function Person(name,age){
+		this.name = name;
+		this.age = age;
+		this.getName = function(){
+			alert(this.name);
+		}
 	}
-}
-var p1 = new Person("lyh",18);
-var p2 = new Person("李玉华",18);
-alert(p1.getName);
-alert(p2.getName);
-alert(p1.getName==p2.getName);   //false
-```
+	var p1 = new Person("lyh",18);
+	var p2 = new Person("李玉华",18);
+	alert(p1.getName);
+	alert(p2.getName);
+	alert(p1.getName==p2.getName);   //false
+	```
 
 
 
