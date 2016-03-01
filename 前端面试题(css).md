@@ -26,6 +26,49 @@
 		<!DOCTYPE html>
 		```
 		
+* **html5的文档类型和字符集是什么**
+
+	* html5的文档类型<!DOCTYPE html>
+	
+	* html5的字符集是: charset = 'utf-8'
+	
+* **html5的输出元素是什么**
+
+	output - 标签定义不同类型的输出，比如脚本的输出。
+	
+		```
+		<form oninput="x.value=parseInt(a.value)+parseInt(b.value)">0
+		   <input type="range" id="a" value="50">100
+		   +<input type="number" id="b" value="50">
+		   =<output name="x" for="a b"></output>
+		</form> 
+		```
+		
+	* for - 定义输出域相关的一个或多个元素，值为元素的id
+		
+	* form - 定义输入字段所属的一个或多个表单，form_id
+	
+	* name - -定义对象的唯一名称, name
+
+	
+* **html5应用程序缓存和浏览器缓存**
+
+	* html5应用程序缓存：这意味着web应用可进行缓存，并可在没有因特网连接时进行访问。
+	
+		* 优势
+		
+			1. 离线浏览 - 用户可在应用离线时使用它们
+			2. 速度 - 已缓存资源加载更快
+			3. 减少服务器负载 - 浏览器将只从服务器下载更新过或更改过的资源。
+			
+		* 实现缓存：
+		
+			如需启用应用程序缓存，请在文档的<html>标签中包含mainfest属性，mainfest文件的建议的文件扩展名是：'.appcahe'
+			
+	* 游览器缓存：
+	* 
+
+		
 ### 语义化标签
 
 * **什么是语义化标签？**

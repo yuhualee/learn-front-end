@@ -106,6 +106,233 @@ alert(p1.writeCss==p2.wirteJs);   //指向同一内存，所以地址相同
 	
 	javascript是通过原型（**prototype**）的方式来实现面向对象的。
 	
+	
+---
+
+## Prototype
+	
+* **Prototype模式**
+
+	Javascript规定，每一个构造函数都有一个prototype属性，指向另一个对象。这个对象的所有属性和方法，都会被构造函数的实例继承。
+	
+	这就意味着，我们可以把那些*不变的属性和方法*，直接定义在prototype对象上：
+	
+	```
+	function Person(name,age){
+		this.name = name;
+		this.age = age;
+	}
+	Person.prototype.type = '人';
+	Person.prototype.say = function(){
+		alert('Person');
+	}
+	var p = new Person('liyuhua',28);
+	var p2 = new Person('liyuhua',28);
+	alert(p.type == p2.type);    //true
+	p.say();   //  Person
+	```
+	
+	> 这样所有的实例的type属性和say方法，其实都是同一个内存地址，指向prototype对象，因此提高了运行效率。
+	
+* **isPrototype模式的验证方法**
+
+	这个方法用来判断，某个prototype对象和某个实例之间的关系
+
+	```
+	alert(Person.prototype.isPrototypeOf(p));
+	```
+	
+* **hasOwnProperty()**
+
+	每个实例对象都有一个hasOwnProperty()方法，用来判断某一个属性到底是本地属性，还是继承自prototype对象的属性。
+
+	```
+	alert(p.hasOwnProperty('name'));    //true
+	alert(p.hasOwnProperty('type'));    //flase
+	```
+	
+* **in运算符**
+
+	in运算符可以用来判断，某个实例是否含有某个属性，不管是不是本地属性。
+
+	```
+	p2.sayHello = function(){
+		alert(this.name);
+	}
+	alert('sayHello' in p);     //false
+	alert('sayHello' in p2);    //true
+	```
+	
+	in运算符还可以用来遍历某个对象的所有属性。
+	
+	```
+	for(var prop in p){
+		alert('p[' + prop + ']=' + p[prop]);
+	}
+	```
+
+	
+## 	继承
+
+* **构造函数绑定**
+
+	```
+	function Animal(){
+		this.species = '动物';
+	}
+	function Cat(name,color){
+		Animal.apply(this,arguments);
+		this.name = name;
+		this.color = color;
+	}
+	var cat1 = new Cat('花花','黄色');
+	alert(cat1.species);    //动物 
+	```
+
+* **prototype模式**
+
+	如果"猫"的prototype对象，指向一个Animal的实例，那么所有"猫"的实例，就能继承Animal了。
+	
+	```
+	function Animal(){
+		this.species = '动物';
+	}
+	function Cat(name,color){
+		this.name = name;
+		this.color = color;
+	}
+	Cat.prototype.say = function(){
+		alert('cat');
+	}
+	Cat.prototype = new Animal();   //代码的第一行，我们将Cat的prototype对象指向一个Animal的实例。它相当于完全删除了prototype 对象原先的值，然后赋予一个新值。
+	Cat.prototype.constructor = Cat;   //任何一个prototype对象都有一个constructor属性，指向它的构造函数。如果没有"Cat.prototype = new Animal();"这一行，Cat.prototype.constructor是指向Cat的；加了这一行以后，Cat.prototype.constructor指向Animal。
+	var cat1 = new Cat('花花','黄色');
+	alert(cat1.say());   //不存在
+	```
+	
+	```
+	Cat.prototype = new Animal();
+	alert(Cat.prototype.constructor == Animal);   //true
+	Cat.prototype.constructor = Cat;
+	alert(Cat.prototype.constructor == Cat);    //true
+	```
+	
+	每一个实例也有一个constructor属性，默认调用prototype对象的constructor属性。
+	
+	```
+	alert(cat1.constructor == Cat.prototype.constructor);
+	```
+	
+	> **这一点很重要，如果替换了prototype对象，则一定要为新的prototype对象加上constructor属性，并将这个属性指回原来的构造函数**
+	
+	```
+	O.prototype = {};
+	O.prototype.constructor = O;
+	```
+	
+		
+* **直接继承prototype**
+
+	由于Animal对象中，不变的属性都可以直接写入Animal.prototype。所以，我们也可以让Cat()跳过 Animal()，直接继承Animal.prototype。
+
+
+	```
+	function Animal(){}
+	Animal.prototype.species = '动物';
+	```
+	
+	然后，将Cat的prototype对象，然后指向Animal的prototype对象，这样就完成了继承。
+	
+	```
+	Cat.prototype = Animal.prototype;
+	Cat.prototype.constructor = Cat;    //这一句实际上把Animal.prototype对象的constructor属性也改掉了！
+	var cat1 = new Cat('花花','黄色');
+	alert(cat1.species);    //动物
+	```
+
+	```
+	alert(Animal.prototype.constructor == Cat.prototype.constructor);    //true
+	```
+	
+	```
+	var a1 = new Animal();
+	alert(a1.constructor == Cat);
+	```
+	
+* **利用空的对象作为中介**
+
+	```
+	function Animal(){};
+	Animal.prototype.sepices = '动物';
+	function Cat(name,color){
+		this.name = name;
+		this.color = color;
+	}
+	var F = function(){};
+	F.prototype = Animal.prototype;
+	Cat.prototype = new F();
+	Cat.prototype.constructor = Cat;
+	//F是空对象，所以几乎不占内存。这时，修改Cat的prototype对象，就不会影响到Animal的prototype对象。
+	alert(Animal.prototype.constructor);
+	```
+	
+	封装：
+	
+	```
+	function Animal(){};
+	Animal.prototype.sepices = '动物';
+	function Cat(name,color){
+		this.name = name;
+		this.color = color;
+	}
+	function extend(Child,Parent){
+		var F = function(){};
+		F.prototype = Parent.prototype;
+		Child.prototype = new F();
+		Child.prototype.constructor = Child;
+		Child.uber = Parent.prototype;
+	}
+	```
+	
+	使用
+	
+	```
+	extend(Cat,Animal);
+	var cat1 = new Cat('大典','黄毛');
+	alert(cat1.sepices);
+	```
+	
+	> 这个extend函数，就是YUI库如何实现继承的方法。
+	
+	```
+	Child.uber = Parent.prototype;
+	```
+	> 意思是为子对象设一个uber属性，这个属性直接指向父对象的prototype属性。（uber是一个德语词，意思是"向上"、"上一层"。）这等于在子对象上打开一条通道，可以直接调用父对象的方法。这一行放在这里，只是为了实现继承的完备性，纯属备用性质。
+	
+
+## 非构造函数的继承
+
+* **object()方法**
+
+	```
+	var Chinese = {
+		nation: '中国'
+	};
+	function object(o){
+		function F(){};
+		F.prototype = o;
+		return new F();
+	}
+	var Doctor = object(Chinese);
+	Doctor.career = '医生';
+	alert(Doctor.nation);   //中国
+	```
+	
+	> 这个object()函数，其实只做一件事，就是把子对象的prototype属性，指向父对象，从而使得子对象与父对象连在一起。
+
+
+
+
 
 
 
