@@ -61,3 +61,18 @@
 	* **方法三：**
 
 * **3.图片自适应大小**
+
+* **4.清除浮动**
+
+	```
+	.cf:before, .cf:after{
+		content:"";
+		display:table;
+	}
+	.cf:after{
+		clear:both;
+	}
+	.cf{
+		zoom:1;
+	}
+	```

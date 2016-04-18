@@ -71,45 +71,35 @@ Excerpt:
 	alert(p1.getName==p2.getName);   //false
 	```
 
-
-
----
----
----
-
-
-* **基于构造函数的原型模式** 
+* **1.4基于构造函数的原型模式** 
 
 	我们发现，不管是哪个实例，我们的writeCss或者writeJs其实都是同样的规范，我们不是每次new函数的时候重新的创建，那么我们如何创建了，又不用重复创建呢？
 	
 	> * object: 创建一个对象数据类型的数据，我们不仅在内存中开辟了一个空间，将自己私有的键值对存进来，而且还有一个系统自带的属性 _ proto _ 
 	
 	> * function:创建一个函数，我们不仅在内存中开辟了一个空间，将我们函数里面的js代码当成字符串存进去，而且还有一个系统自带的属性：prototype
-	
-	> * 
-```
-function constructFn(name,age){
+	 
+	```
+	function constructFn(name,age){
 		this.name = name;
 		this.age = age;
-}
-constructFn.prototype.writeCss = function(){
-};
-constructFn.prototype.writeJs = function(){
-};
-var p1 = new constructFn("aaa",1);
-var p2 = new constructFn("bbb",2);
-p1.name;
-p1.age;
-p1.writeCss;
-p1.writeJs;
-alert(p1.writeCss==p2.wirteJs);   //指向同一内存，所以地址相同
-```
+	}
+	constructFn.prototype.writeCss = function(){
+	};
+	constructFn.prototype.writeJs = function(){
+	};
+	var p1 = new constructFn("aaa",1);
+	var p2 = new constructFn("bbb",2);
+	p1.name;
+	p1.age;
+	p1.writeCss;
+	p1.writeJs;
+	alert(p1.writeCss==p2.wirteJs);   //指向同一内存，所以地址相同
+	```
 	>* 如果我们的某个实例想获取类中prototype上定义的方法和属性，我们的原理是：实例中默认的 _ proto _ 属性去获取的.
 	>* p1.wirteCss();----先在类中私有空间中找这个方法，如果没有的话，才去类的原型链上找，如果有，则不再去原型链上找
 
 
-
----
 ---
 
 * **重新认识面向对象：**

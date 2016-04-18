@@ -50,3 +50,82 @@ function JSONParse(str){
 	}
 }
 ```
+
+
+## json方法
+
+* **解析json字符串**
+
+	```
+	var jsJson = JSON.parse(jsonString);
+	```
+	
+* **将对象转化为json**
+
+	```
+	var foo = {};
+	foo.bar = "new property";
+	foo.baz = 3;
+	var jsonString = JSON.stringify(foo);
+	```
+	
+	```
+	function censor(key, value) {
+  if (typeof(value) == "string") {
+    return undefined;
+  }
+  return value;
+}
+var foo = {foundation: "Mozilla", model: "box", week: 45, transport: "car", month: 7};
+var jsonString = JSON.stringify(foo, censor);
+	```
+
+* **JSON.parse**
+
+	**JSON.parse()**  - 方法可以将一个 JSON 字符串解析成为一个 JavaScript 值。在解析过程中，还可以选择性的篡改某些属性的原始解析值。
+	
+	```
+	JSON.parse('{}');              // {}
+	JSON.parse('true');            // true
+	JSON.parse('"foo"');           // "foo"
+	JSON.parse('[1, 5, "false"]'); // [1, 5, "false"]
+	JSON.parse('null');            // null
+	```
+
+* **JSON.stringify**
+
+	JSON.stringify() 方法可以将任意的 JavaScript 值序列化成 JSON 字符串。
+	
+	```
+	JSON.stringify({});                        // '{}'
+	JSON.stringify(true);                      // 'true'
+	JSON.stringify("foo");                     // '"foo"'
+	JSON.stringify([1, "false", false]);       // '[1,"false",false]'
+	JSON.stringify({ x: 5 });                  // '{"x":5}'
+	//
+	JSON.stringify({x: 5, y: 6});              
+	// '{"x":5,"y":6}' 或者 '{"y":6,"x":5}' 都可能
+	JSON.stringify([new Number(1), new String("false"), new Boolean(false)]); 
+	// '[1,"false",false]'
+	JSON.stringify({x: undefined, y: Object, z: Symbol("")}); 
+	// '{}'
+	JSON.stringify([undefined, Object, Symbol("")]);          
+	// '[null,null,null]' 
+	JSON.stringify({[Symbol("foo")]: "foo"});                 
+	// '{}'
+	JSON.stringify({[Symbol.for("foo")]: "foo"}, [Symbol.for("foo")]);
+	// '{}'
+	JSON.stringify({[Symbol.for("foo")]: "foo"}, function (k, v) {
+	  if (typeof k === "symbol"){
+	    return "a symbol";
+	  }
+	});
+	// '{}'  
+	// 不可枚举的属性默认会被忽略：
+	JSON.stringify( Object.create(null, { x: { value: 'x', enumerable: false }, 	y: { value: 'y', enumerable: true } }) );
+	// '{"y":"y"}'
+	```
+
+
+
+
