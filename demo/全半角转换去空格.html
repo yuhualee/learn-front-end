@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>全半角转换去空格</title>
+	<style>
+	input{border: 1px solid #ccc;background-color: #f1f1f1;padding: 5px;line-height: 20px;}
+	.box{margin: 20px;border-bottom: 1px solid #ccc;}
+	</style>
+</head>
+<body>
+	<p>全角空格为12288，半角空格为32 </p>
+	<p>全角\u3000</p>
+	<p>其他字符半角(33-126)与全角(65281-65374)的对应关系是：均相差65248 </p>
+	<p>charCodeAt()方法返回指定位置的字符的Unicode编码。</p>
+	<p>String.fromCharCode()可接受一个指定的Unicode值，然后返回一个字符串。</p>
+	<div class="box">
+		<p>转半角</p>
+		<input type="text" id="DBC">
+		<p class="show">输出：<span></span></p>
+	</div>
+	<div class="box">
+		<p>转全角</p>
+		<input type="text" id="SBC">
+		<p class="show">输出：<span></span></p>
+	</div>
+	<div class="box">
+		<p>去全角半角空格</p>
+		<input type="text" id="trim">
+		<p class="show">输出：<span></span></p>
+	</div>
+<script src="jquery-1.11.2.min.js"></script>
+<script>
+	$(function(){
+		//全角转半角
+		var toDBC = function(str){
+			var tmp = '';
+			for(var i=0; i<str.length; i++){
+				if(str.charCodeAt(i)>65281 && str.charCodeAt(i)<65375){
+					tmp += String.fromCharCode(str.charCodeAt(i)-65248);
+				}else if(str.charCodeAt(i) == 12288){
+					tmp += String.fromCharCode(str.charCodeAt(i) - 12288 + 32);
+				}else{
+					tmp += str[i];
+				}
+			}
+			return tmp;
+		};
+		var toSBC = function(str){
+			var tmp = '';
+			for(var i=0; i<str.length; i++){
+				if(str.charCodeAt(i)>32 && str.charCodeAt(i)<127){
+					tmp += String.fromCharCode(str.charCodeAt(i)+65248);
+				}else{
+					tmp += str[i];
+
+				}
+			}
+			return tmp;
+		};
+
+		var toTrim = function(str){
+			return str.replace(/\s+/g,"");
+		};
+
+		$('#DBC').keydown(function(){
+			$(this).next().find('span').text(toDBC($(this).val()));
+		});
+		$('#SBC').keydown(function(){
+			$(this).next().find('span').text(toSBC($(this).val()));
+		});
+		$('#trim').keydown(function(){
+			$(this).next().find('span').text(toTrim(toDBC($(this).val())));
+		});
+	});
+	// 正则
+	$(function(){
+		// 去全部半角空格
+		String.prototype.trim = function(){
+			return this.replace(/\s+/g,'半');
+		};
+		// 去两头空格
+		String.prototype.feSpace = function(){
+			return this.replace(/^\s+|\s+$/g,'');
+		};
+		// 去前空格
+		String.prototype.LSpace = function(){
+			return this.replace(/^\s*/,'');
+		};
+		// 去后空格
+		String.prototype.RSpace = function(){
+			return this.replace(/\s*$/,'');
+		};
+		// 去所有空格
+		String.prototype.ATrim = function(){
+			return this.replace(/[\u3000*\s*]/g,'');
+		};
+	});
+	$(function(){
+		$.fn.prototype = function(){
+
+		};
+	});
+</script>
+</body>
+</html>
